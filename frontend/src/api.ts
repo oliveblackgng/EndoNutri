@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'
+const BASE = 'https://endonutri.onrender.com/api'
 export function token(){return localStorage.getItem('endo_token')}
 export async function api<T>(path:string, init:RequestInit={}):Promise<T>{
  const headers = new Headers(init.headers)
