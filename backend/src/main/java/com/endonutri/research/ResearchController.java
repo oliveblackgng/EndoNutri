@@ -3,6 +3,7 @@ package com.endonutri.research;
 import com.endonutri.auth.AppUser;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -56,7 +57,7 @@ public class ResearchController {
         String stored = UUID.randomUUID() + ".csv";
         Path target = uploadDir.resolve(stored).normalize();
         if (!target.getParent().equals(uploadDir)) return ResponseEntity.badRequest().build();
-        Files.copy(file.getInputStream(), target, StandardCopyOption.CREATE_NEW);
+       Files.copy(file.getInputStream(), target);
         return ResponseEntity.status(201).body(Map.of("datasetId", stored, "originalFilename",
             original.replaceAll("[\\r\\n]", ""), "bytes", file.getSize(), "status", "UPLOADED"));
     }
