@@ -1,4 +1,5 @@
-const BASE = 'https://endonutri.onrender.com/api'
+
+const BASE = (import.meta.env.VITE_API_BASE_URL || 'https://endonutri.onrender.com/api').replace(/\/$/, '')
 export function token(){return localStorage.getItem('endo_token')}
 export async function api<T>(path:string, init:RequestInit={}):Promise<T>{
  const headers = new Headers(init.headers)

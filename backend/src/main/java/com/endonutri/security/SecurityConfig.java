@@ -16,6 +16,7 @@ public class SecurityConfig {
   return http.csrf(c->c.disable()).cors(c->{}).sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
    .authorizeHttpRequests(a->a.requestMatchers("/api/auth/**","/api/health","/actuator/health").permitAll()
     .requestMatchers("/api/patient/**").hasRole("PATIENT")
+    .requestMatchers("/api/advisor/**").hasRole("ADVISOR")
     .requestMatchers("/api/research/**").hasRole("RESEARCHER")
     .anyRequest().authenticated())
    .addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class).build();

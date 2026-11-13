@@ -135,3 +135,36 @@ endonutri/
 - JWT tokens are sent as Bearer tokens. For a hardened deployment, prefer short-lived access tokens plus rotating, HttpOnly, Secure, SameSite refresh cookies and CSRF protections where applicable.
 - Dataset files should be stored outside the web root and scanned before analysis.
 - Configure HTTPS, secrets management, backups, rate limiting, monitoring, and a production-grade object store before deployment.
+
+
+## Role-based workspaces and advisor appointments
+
+This build adds separate navigation and pages for PATIENT, ADVISOR and RESEARCHER roles.
+The patient can browse open advisor slots and submit a pending appointment request.
+An advisor can publish future slots and accept or decline requests. Declining releases
+the slot for another request. Slot updates are protected by a database row lock so two
+patients cannot successfully request the same open slot concurrently.
+
+### Deploying this update to Render
+
+1. Replace the contents of your local project with this updated project (keep your own
+   `.env` file private; do not commit it).
+2. Commit and push the changes to the GitHub branch connected to Render.
+3. Render should redeploy the backend and static frontend. If not, manually deploy
+   the latest commit for both services.
+4. Keep the backend environment variable `CORS_ALLOWED_ORIGINS` set to the exact
+   frontend origin, for example `https://endonutri-1.onrender.com` (no trailing slash).
+5. The frontend reads `VITE_API_BASE_URL` at build time. Set it on the Static Site to
+   `https://endonutri.onrender.com/api` if the dashboard offers build environment
+   variables. The source fallback is already configured to that API URL.
+6. Flyway applies `V3__advisor_appointments.sql` automatically on backend startup.
+
+### Current scope and safeguards
+
+Appointment availability is currently published as specific date/time slots (not recurring
+weekly schedules). Requests remain pending until the advisor accepts or declines them.
+A pending request holds its slot; declining releases it. No calendar invitations,
+email/SMS notifications, recurring schedules, or cancellation workflow are included yet.
+Researcher pages remain clearly marked as foundation/next-phase placeholders; this update
+does not claim to implement a complete virtual lab or paper repository. Patient-level
+health records are not exposed to researchers by these appointment changes.
